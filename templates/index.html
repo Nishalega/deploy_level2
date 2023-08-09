@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Submission Form</title>
+</head>
+<body>
+    <h1>Submit JSON</h1>
+    <form id="jsonForm" method="POST" action="/">
+        <label for="json_data">Enter JSON:</label><br>
+        <textarea id="json_data" name="json_data" rows="5" cols="40"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+    <h2>API Response:</h2>
+    <pre id="apiResponse"></pre>
+
+    <script>
+        document.getElementById("jsonForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const jsonData = formData.get("json_data");
+
+            fetch("/", {
+                method: "POST",
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("apiResponse").textContent = data;
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById("apiResponse").textContent = "Error occurred. Check console.";
+            });
+        });
+    </script>
+</body>
+</html>
